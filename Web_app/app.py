@@ -27,11 +27,13 @@ def preprocess(text):
     seq = seq.reshape(1, 106)
     return seq
 
+
 #WEBAPP
 app = Flask(__name__)
 
 @app.route("/", methods =['POST'])
 def webapp():
+    #MODEL
     global graph
     graph = tf.get_default_graph()
     model = load_model('weights/model.h5')
@@ -40,9 +42,9 @@ def webapp():
         y_pred = model.predict(txt.reshape(1,106),batch_size=1,verbose = 2)
     pred_int = np.argmax(y_pred)
     if pred_int == 1:
-        prediction = "sarcastic"
+        prediction = "SARCASTIC"
     else:
-        prediction = "not sarcastic"
+        prediction = "NOT SARCASTIC"
     return render_template('templates.html', prediction = prediction)
 
 @app.route('/', methods=['GET'])
